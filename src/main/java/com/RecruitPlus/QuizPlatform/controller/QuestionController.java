@@ -19,12 +19,11 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-
-
-    @DeleteMapping("/question/{id}")
-    public ResponseEntity<Object> deleteQuestion(@PathVariable BigInteger id){
-        questionService.deleteQuestion(id);
+    @PostMapping("/questions")
+    public ResponseEntity<Object> saveQuestion(@RequestBody Questions question)
+    {
+        questionService.saveNewQuestion(question);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
     }
+
 }
