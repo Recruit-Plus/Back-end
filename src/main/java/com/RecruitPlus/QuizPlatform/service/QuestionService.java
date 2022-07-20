@@ -1,17 +1,33 @@
 package com.RecruitPlus.QuizPlatform.service;
 
 
+import com.RecruitPlus.QuizPlatform.model.Questions;
 import com.RecruitPlus.QuizPlatform.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.List;
+import java.util.Optional;
 
+@Service
 public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
+    public List<Questions> getAllQuestions() {
 
-    public void deleteQuestion(BigInteger id) {
+        return questionRepository.findAll();
+    }
+
+    public Optional<Questions> getQuestionById(String id){
+
+        return questionRepository.findById(id);
+    }
+
+
+    public void deleteQuestion(String id) {
+
         questionRepository.deleteById(id);
     }
 
