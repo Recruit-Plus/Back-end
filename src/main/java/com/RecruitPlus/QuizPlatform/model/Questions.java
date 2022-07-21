@@ -27,14 +27,12 @@ public class Questions {
     private List<String> answer;
     @Field("type")
     private String type;
-    @Field("category")
-    private String category;
     @Field("topics")
     private List<String> topics;
     @Field("score")
     private int score;
     @Field("duration")
-    private String duration;
+    private double duration;
     @Field("created_by")
     private String created_by;
     @Field("last_modified_by")
