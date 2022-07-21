@@ -20,17 +20,17 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public Optional<Questions> getQuestionById(String id){
+    public Optional<Questions> getQuestionById(String questionId){
 
-        return questionRepository.findById(id);
+        return questionRepository.findById(questionId);
     }
 
     public void saveNewQuestion(Questions question) {
         questionRepository.save(question);
     }
-    public void deleteQuestion(String id) {
+    public void deleteQuestion(String questionId) {
 
-        questionRepository.deleteById(id);
+        questionRepository.deleteById(questionId);
     }
 
 

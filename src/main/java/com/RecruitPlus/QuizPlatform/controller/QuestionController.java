@@ -28,11 +28,11 @@ public class QuestionController {
         return questionsList;
     }
 
-    @GetMapping("/questions/{id}")
+    @GetMapping("/questions/{questionId}")
     @ResponseBody
-    public Optional<Questions> getQuestionById(@PathVariable  String id){
+    public Optional<Questions> getQuestionById(@PathVariable  String questionId){
 
-        Optional<Questions> questionsListById=questionService.getQuestionById(id);
+        Optional<Questions> questionsListById=questionService.getQuestionById(questionId);
         return questionsListById;
     }
     @PostMapping("/questions")
@@ -42,9 +42,9 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping("/question/{id}")
-    public ResponseEntity<Object> deleteQuestion(@PathVariable String id){
-        questionService.deleteQuestion(id);
+    @DeleteMapping("/question/{questionId}")
+    public ResponseEntity<Object> deleteQuestion(@PathVariable String questionId){
+        questionService.deleteQuestion(questionId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
