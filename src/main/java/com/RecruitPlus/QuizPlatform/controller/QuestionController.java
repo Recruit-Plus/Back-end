@@ -35,7 +35,12 @@ public class QuestionController {
         Optional<Questions> questionsListById=questionService.getQuestionById(id);
         return questionsListById;
     }
-
+    @PostMapping("/questions")
+    public ResponseEntity<Object> saveQuestion(@RequestBody Questions question)
+    {
+        questionService.saveNewQuestion(question);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
     @DeleteMapping("/question/{id}")
     public ResponseEntity<Object> deleteQuestion(@PathVariable String id){
