@@ -1,6 +1,7 @@
 package com.RecruitPlus.QuizPlatform.controller;
 
 import com.RecruitPlus.QuizPlatform.model.Questions;
+import com.RecruitPlus.QuizPlatform.repository.QuestionRepository;
 import com.RecruitPlus.QuizPlatform.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,9 @@ import java.util.Optional;
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @GetMapping("/questions")
     @ResponseBody
@@ -48,4 +52,26 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
+    @GetMapping("/type/questions")
+    public List<Questions> getByType(@RequestParam String type)
+    {
+        List<Questions> ListOfQuestions=questionRepository.byType(type);
+        return ListOfQuestions;
+    }
+
+    @GetMapping("topics/questions")
+    public List<Questions> getByTopics(@RequestParam String[] topics)
+    {
+        List<Questions> QuestionsByCategory=questionRepository.byTopics(topics);
+        return QuestionsByCategory;
+    }
+
+    @GetMapping("/difficulty_level/questions")
+    public List<Questions> getByDifficultyLevel(@RequestParam String difficulty_level)
+    {
+        List<Questions> QuestionsByDiffLevel=questionRepository.byDiffLevel(difficulty_level);
+        return QuestionsByDiffLevel;
+    }
+
+
 }
