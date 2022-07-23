@@ -1,19 +1,15 @@
 package com.RecruitPlus.QuizPlatform.repository;
-import com.RecruitPlus.QuizPlatform.model.Questions;
+import com.RecruitPlus.QuizPlatform.model.Question;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import java.math.BigInteger;
-import java.util.List;
+import java.util.Optional;
 
-public interface QuestionRepository extends MongoRepository<Questions, String>
+public interface QuestionRepository extends MongoRepository<Question, String>
 {
-    @Query("{ 'type' : ?0 }")
-    public List<Questions> byType(String type);
+    //Query for filtering questions based on topic,type,difficulty level
+    @Query("{ 'topics': ?0 ,'type' : ?1 , 'difficulty_level': ?2 }")
+    Optional<Question> byFilter( String[] topics, String type, String difficulty_level );
 
-    @Query("{ 'topics' : ?0}")
-    public List<Questions> byTopics(String[] topics);
 
-    @Query("{ 'difficulty_level' : ?0 }")
-    public List<Questions> byDiffLevel(String difficulty_level);
 }

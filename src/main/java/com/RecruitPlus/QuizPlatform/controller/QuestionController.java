@@ -1,19 +1,16 @@
 package com.RecruitPlus.QuizPlatform.controller;
 
-import com.RecruitPlus.QuizPlatform.model.Questions;
-import com.RecruitPlus.QuizPlatform.repository.QuestionRepository;
+import com.RecruitPlus.QuizPlatform.model.Question;
 import com.RecruitPlus.QuizPlatform.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -22,25 +19,23 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @Autowired
-    private QuestionRepository questionRepository;
-
+    //Listing out all the questions
     @GetMapping("/questions")
     @ResponseBody
-    public  List<Questions> getAllQuestions( ){
-        List<Questions> questionsList=questionService.getAllQuestions();
+    public  List<Question> getAllQuestions( ){
+        List<Question> questionsList=questionService.getAllQuestions();
         return questionsList;
     }
-
+    //Getting a question by specific id if exists
     @GetMapping("/questions/{questionId}")
     @ResponseBody
-    public Optional<Questions> getQuestionById(@PathVariable  String questionId){
+    public ResponseEntity<Object> getQuestionById(@PathVariable  String questionId){
 
-        Optional<Questions> questionsListById=questionService.getQuestionById(questionId);
-        return questionsListById;
+        return questionService.getQuestionById(questionId);
+
     }
     @PostMapping("/questions")
-    public ResponseEntity<Object> saveQuestion(@RequestBody Questions question)
+    public ResponseEntity<Object> saveQuestion(@RequestBody Question question)
     {
         questionService.saveNewQuestion(question);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -52,26 +47,16 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
-    @GetMapping("/type/questions")
-    public List<Questions> getByType(@RequestParam String type)
+    //Getting list of questions which are filtered by topic,type and difficulty level
+    @GetMapping("filter/questions")
+    public ResponseEntity<Object> getByFilters( @RequestParam(value = "topics") String[] topics,@RequestParam(value = "type") String type, @RequestParam(value = "difficulty_level") String difficulty_level)
     {
-        List<Questions> ListOfQuestions=questionRepository.byType(type);
-        return ListOfQuestions;
+        return questionService.byFilter(topics,type,difficulty_level);
     }
-
-    @GetMapping("topics/questions")
-    public List<Questions> getByTopics(@RequestParam String[] topics)
-    {
-        List<Questions> QuestionsByCategory=questionRepository.byTopics(topics);
-        return QuestionsByCategory;
+    //pagination
+    @GetMapping("/questionPages")
+    public Page<Question> questionsPaginated(Pageable p){
+        return questionService.questionPaginated(p);
     }
-
-    @GetMapping("/difficulty_level/questions")
-    public List<Questions> getByDifficultyLevel(@RequestParam String difficulty_level)
-    {
-        List<Questions> QuestionsByDiffLevel=questionRepository.byDiffLevel(difficulty_level);
-        return QuestionsByDiffLevel;
-    }
-
 
 }

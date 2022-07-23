@@ -1,13 +1,9 @@
 package com.RecruitPlus.QuizPlatform.model;
 
-
-
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-
 import java.util.List;
 
 @Document(collection = "questions")
@@ -16,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-public class Questions {
+public class Question{
     @Id
     private String questionId;
     @Field("question")
