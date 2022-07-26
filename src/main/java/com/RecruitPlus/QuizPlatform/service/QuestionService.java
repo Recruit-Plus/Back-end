@@ -1,5 +1,6 @@
 package com.RecruitPlus.QuizPlatform.service;
 
+import com.RecruitPlus.QuizPlatform.Exceptions.QuestionNotFoundException;
 import com.RecruitPlus.QuizPlatform.model.Question;
 import com.RecruitPlus.QuizPlatform.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,14 @@ public class QuestionService {
         return questionRepository.findAll();
     }
     //Getting a question by specific id if exists
-    public ResponseEntity<Object> getQuestionById(String questionId){
+    public Optional<Question> getQuestionById(String questionId){
 
         Optional<Question> question= questionRepository.findById(questionId);
         if(question.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(question.get());
+            return question;
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        else
+            throw new QuestionNotFoundException(questionId);
     }
 
     public void saveNewQuestion(Question question) {
@@ -41,13 +42,14 @@ public class QuestionService {
         questionRepository.deleteById(questionId);
     }
     //Getting list of questions which are filtered by topic,type and difficulty level
-    public ResponseEntity<Object> byFilter(String[] topics,String type,String difficulty_level){
-        Optional<Question> filteredQuestions=questionRepository.byFilter(topics,type,difficulty_level);
+    public ResponseEntity<Object> byFilters(String[] topics, String type, String difficulty_level){
+        Optional<Question> filteredQuestions=questionRepository.byFilters(topics,type,difficulty_level);
         if(filteredQuestions.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(filteredQuestions.get());
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
     //pagination
     public Page<Question> questionPaginated(Pageable p){
         return questionRepository.findAll( p);

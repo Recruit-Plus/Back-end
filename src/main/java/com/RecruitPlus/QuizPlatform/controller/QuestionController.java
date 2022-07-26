@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -29,7 +30,7 @@ public class QuestionController {
     //Getting a question by specific id if exists
     @GetMapping("/questions/{questionId}")
     @ResponseBody
-    public ResponseEntity<Object> getQuestionById(@PathVariable  String questionId){
+    public Optional<Question> getQuestionById(@PathVariable  String questionId){
 
         return questionService.getQuestionById(questionId);
 
@@ -49,13 +50,15 @@ public class QuestionController {
     }
     //Getting list of questions which are filtered by topic,type and difficulty level
     @GetMapping("filter/questions")
-    public ResponseEntity<Object> getByFilters( @RequestParam(value = "topics") String[] topics,@RequestParam(value = "type") String type, @RequestParam(value = "difficulty_level") String difficulty_level)
+    public ResponseEntity<Object> getByFilters(@RequestParam String[] topics, @RequestParam(required = false) String type, @RequestParam(required = false) String difficulty_level)
     {
-        return questionService.byFilter(topics,type,difficulty_level);
+        return questionService.byFilters(topics,type,difficulty_level);
     }
+
     //pagination
     @GetMapping("/questionPages")
     public Page<Question> questionsPaginated(Pageable p){
+
         return questionService.questionPaginated(p);
     }
 
