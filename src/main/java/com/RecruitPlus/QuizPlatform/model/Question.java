@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 public class Question{
     @Id
-    private String questionId;
+    private String question_id;
     @Field("question")
     private String question;
     @Field("choices")
