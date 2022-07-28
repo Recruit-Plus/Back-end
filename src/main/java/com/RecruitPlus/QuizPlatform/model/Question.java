@@ -16,9 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-public class Questions {
+public class Question {
     @Id
-    private String id;
+    private String questionId;
     @Field("question")
     private String question;
     @Field("choices")
@@ -34,7 +34,7 @@ public class Questions {
     @Field("score")
     private int score;
     @Field("duration")
-    private String duration;
+    private double duration;
     @Field("created_by")
     private String created_by;
     @Field("last_modified_by")
