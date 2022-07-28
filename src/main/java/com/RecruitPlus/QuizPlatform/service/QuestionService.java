@@ -1,12 +1,11 @@
 package com.RecruitPlus.QuizPlatform.service;
 
 
-import com.RecruitPlus.QuizPlatform.model.Questions;
+import com.RecruitPlus.QuizPlatform.model.Question;
 import com.RecruitPlus.QuizPlatform.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,22 +14,29 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public List<Questions> getAllQuestions() {
+    public List<Question> getAllQuestions() {
 
         return questionRepository.findAll();
     }
 
-    public Optional<Questions> getQuestionById(String questionId){
+    public Optional<Question> getQuestionById(String questionId){
 
         return questionRepository.findById(questionId);
     }
 
-    public void saveNewQuestion(Questions question) {
-        questionRepository.save(question);
+    public Question saveNewQuestion(Question question)
+    {
+        return questionRepository.save(question);
     }
-    public void deleteQuestion(String questionId) {
 
-        questionRepository.deleteById(questionId);
+    public void deleteQuestion(String id) {
+
+        questionRepository.deleteById(id);
+    }
+
+    public void deleteAllQuestion() {
+
+        questionRepository.deleteAll();
     }
 
 

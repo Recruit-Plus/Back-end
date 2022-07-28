@@ -1,7 +1,9 @@
 package com.RecruitPlus.QuizPlatform.controller;
 
-import com.RecruitPlus.QuizPlatform.model.Questions;
+import com.RecruitPlus.QuizPlatform.dto.QuestionDto;
+import com.RecruitPlus.QuizPlatform.model.Question;
 import com.RecruitPlus.QuizPlatform.service.QuestionService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,29 +25,44 @@ public class QuestionController {
 
     @GetMapping("/questions")
     @ResponseBody
-    public  List<Questions> getAllQuestions( ){
-        List<Questions> questionsList=questionService.getAllQuestions();
+    public  List<Question> getAllQuestions( ){
+        List<Question> questionsList=questionService.getAllQuestions();
         return questionsList;
     }
 
     @GetMapping("/questions/{questionId}")
     @ResponseBody
-    public Optional<Questions> getQuestionById(@PathVariable  String questionId){
+    public Optional<Question> getQuestionById(@PathVariable  String questionId){
 
-        Optional<Questions> questionsListById=questionService.getQuestionById(questionId);
+        Optional<Question> questionsListById=questionService.getQuestionById(questionId);
         return questionsListById;
     }
     @PostMapping("/questions")
-    public ResponseEntity<Object> saveQuestion(@RequestBody Questions question)
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public QuestionDto saveQuestion(@RequestBody Question question)
     {
-        questionService.saveNewQuestion(question);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        Question savedQuestion  = questionService.saveNewQuestion(question);
+        QuestionDto questionDto = new QuestionDto();
+        BeanUtils.copyProperties(savedQuestion,questionDto);
+
+        return questionDto;
+
     }
 
-    @DeleteMapping("/question/{questionId}")
-    public ResponseEntity<Object> deleteQuestion(@PathVariable String questionId){
-        questionService.deleteQuestion(questionId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @DeleteMapping("/question/{id}")
+    public boolean deleteQuestion(@PathVariable String id){
+        questionService.deleteQuestion(id);
+        return true;
+
+    }
+
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @DeleteMapping("/questions")
+    public boolean deleteAllQuestion(){
+        questionService.deleteAllQuestion();
+        return true;
 
     }
 }
