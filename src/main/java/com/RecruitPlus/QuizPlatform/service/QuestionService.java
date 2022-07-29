@@ -41,8 +41,8 @@ public class QuestionService {
     {
         return questionRepository.save(question);
     }
-    //updating existing questioncd 
-    public Optional<Question> updateQuestion(String question_id, Question question)
+    //updating existing question
+    public void updateQuestion(String question_id,Question question)
 
     {
         Question findById= questionRepository.findById(question_id)
@@ -59,7 +59,6 @@ public class QuestionService {
         findById.setLast_modified_by(question.getLast_modified_by());
         findById.setDifficulty_level(question.getDifficulty_level());
         questionRepository.save(findById);
-        return questionRepository.findById(question_id);
 
     }
     //deleting a question with specific id

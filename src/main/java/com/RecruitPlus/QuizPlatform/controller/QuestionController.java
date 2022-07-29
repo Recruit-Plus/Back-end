@@ -52,9 +52,9 @@ public class QuestionController {
     //updating existing question
     @ResponseStatus(code = HttpStatus.OK)
     @PutMapping("/v1/question/{question_id}")
-    public Optional<Question> updateById(@PathVariable String question_id,@RequestBody Question question )
+    public void updateById(@RequestBody Question question,@PathVariable String question_id )
     {
-        return questionService.updateQuestion(question_id,question);
+        questionService.updateQuestion(question_id,question);
     }
 
     //deleting a question with specific id
