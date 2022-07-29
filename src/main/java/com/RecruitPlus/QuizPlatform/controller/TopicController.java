@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/recruitPlus")
+@RequestMapping("/topics")
 public class TopicController {
     @Autowired
     private TopicService topicService;
 
-    @GetMapping("/topics")
+    @GetMapping("/v1")
     @ResponseBody
     public List<Topic> getAllTopics( ){
         List<Topic> topicList=topicService.getAllTopics();
         return topicList;
     }
 
-    @PostMapping("/topic")
+    @PostMapping("/v1")
     @ResponseBody
     public ResponseEntity<Object> saveTopic(@RequestBody Topic topic)
     {
