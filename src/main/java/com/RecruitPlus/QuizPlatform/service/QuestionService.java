@@ -28,14 +28,14 @@ public class QuestionService {
     }
 
     //Getting a question by specific id if exists
-    public Optional<Question> getQuestionById(String question_id){
+    public Optional<Question> getQuestionById(String questionId){
 
-        Optional<Question> question= questionRepository.findById(question_id);
+        Optional<Question> question= questionRepository.findById(questionId);
         if(question.isPresent()) {
             return question;
         }
         else
-            throw new QuestionNotFoundException(question_id);
+            throw new QuestionNotFoundException(questionId);
     }
     // adding a new question
     public Question saveNewQuestion(Question question)
@@ -43,11 +43,11 @@ public class QuestionService {
         return questionRepository.save(question);
     }
     //updating existing question
-    public void updateQuestion(String question_id,Question question)
+    public void updateQuestion(String questionId,Question question)
 
     {
-        Question findById= questionRepository.findById(question_id)
-                .orElseThrow(() -> new QuestionNotFoundException(question_id));
+        Question findById= questionRepository.findById(questionId)
+                .orElseThrow(() -> new QuestionNotFoundException(questionId));
 
         findById.setQuestion(question.getQuestion());
         findById.setChoices(question.getChoices());
