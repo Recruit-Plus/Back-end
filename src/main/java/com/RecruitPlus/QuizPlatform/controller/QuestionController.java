@@ -72,7 +72,7 @@ public class QuestionController {
     }
 
     //Getting list of questions which are filtered by topic,type and difficulty level
-    @GetMapping("/")
+    @GetMapping("/search")
     public List<Question> filterQuestions(@RequestParam(required = false) String[] topics, @RequestParam(required = false) String type, @RequestParam(required = false) String difficulty_level)
     {
         return questionService.findQuestionByFilters(topics,type,difficulty_level);
