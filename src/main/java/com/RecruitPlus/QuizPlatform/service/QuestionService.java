@@ -21,11 +21,12 @@ public class QuestionService {
     private QuestionRepository questionRepository;
     @Autowired
     MongoTemplate mongoTemplate;
-    //Listing out all the questions
-    public List<Question> getAllQuestions() {
+    //Listing out all the questions and pagination
+    public Page<Question> questionPaginated(Pageable p){
 
-        return questionRepository.findAll();
+        return questionRepository.findAll( p);
     }
+
     //Getting a question by specific id if exists
     public Optional<Question> getQuestionById(String question_id){
 
@@ -91,9 +92,7 @@ public class QuestionService {
         return mongoTemplate.find(query,Question.class);
 
     }
-    //pagination
-    public Page<Question> questionPaginated(Pageable p){
-        return questionRepository.findAll( p);
-    }
+
+
 
 }

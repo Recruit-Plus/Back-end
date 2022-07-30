@@ -16,27 +16,26 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/questions/v1")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
     //Listing out all the questions
-    @GetMapping("/v1")
-    public  List<Question> getAllQuestions( ){
-        List<Question> questionsList=questionService.getAllQuestions();
-        return questionsList;
+    @GetMapping("/")
+    public  Page<Question> getAllQuestions(Pageable p ){
+        return questionService.questionPaginated(p);
     }
 
     //Getting a question by specific id if exists
-    @GetMapping("/v1/question/{question_id}")
-    public Optional<Question> getQuestionById(@PathVariable  String question_id){
+    @GetMapping("/question/{question_id}")
+    public Optional<Question> getQuestionById(@PathVariable(value="question_id")  String questionId){
 
-        return questionService.getQuestionById(question_id);
+        return questionService.getQuestionById(questionId);
 
     }
     //adding a new question
-    @PostMapping("/v1")
+    @PostMapping("/question")
     @ResponseStatus(code = HttpStatus.CREATED)
     public QuestionDto saveQuestion(@RequestBody Question question)
     {
@@ -51,38 +50,34 @@ public class QuestionController {
 
     //updating existing question
     @ResponseStatus(code = HttpStatus.OK)
-    @PutMapping("/v1/question/{question_id}")
-    public void updateById(@RequestBody Question question,@PathVariable String question_id )
+    @PutMapping("/question/{question_id}")
+    public void updateById(@RequestBody Question question,@PathVariable(value="question_id") String questionId )
     {
-        questionService.updateQuestion(question_id,question);
+        questionService.updateQuestion(questionId,question);
     }
 
     //deleting a question with specific id
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    @DeleteMapping("/v1/question/{question_id}")
-    public void deleteQuestion(@PathVariable String question_id){
-         questionService.deleteQuestion(question_id);
+    @DeleteMapping("/question/{question_id}")
+    public void deleteQuestion(@PathVariable(value="question_id") String questionId){
+         questionService.deleteQuestion(questionId);
     }
 
     //deleting all questions
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    @DeleteMapping("/v1")
+    @DeleteMapping("/")
     public boolean deleteAllQuestion(){
         questionService.deleteAllQuestion();
         return true;
     }
 
     //Getting list of questions which are filtered by topic,type and difficulty level
-    @GetMapping("/v1/question")
-    public List<Question> getByFilters(@RequestParam(required = false) String[] topics, @RequestParam(required = false) String type, @RequestParam(required = false) String difficulty_level)
+    @GetMapping("/")
+    public List<Question> filterQuestions(@RequestParam(required = false) String[] topics, @RequestParam(required = false) String type, @RequestParam(required = false) String difficulty_level)
     {
         return questionService.findQuestionByFilters(topics,type,difficulty_level);
     }
 
-    //pagination
-    @GetMapping
-    public Page<Question> questionsPaginated(Pageable p){
-        return questionService.questionPaginated(p);
-    }
+
 
 }
