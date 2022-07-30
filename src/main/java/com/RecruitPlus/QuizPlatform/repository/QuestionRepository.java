@@ -1,10 +1,13 @@
 package com.RecruitPlus.QuizPlatform.repository;
-import com.RecruitPlus.QuizPlatform.model.Questions;
+import com.RecruitPlus.QuizPlatform.model.Question;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-import java.math.BigInteger;
 
-public interface QuestionRepository extends MongoRepository<Questions, String>
+@Repository
+public interface QuestionRepository extends MongoRepository<Question, String>
 {
 
 }
+

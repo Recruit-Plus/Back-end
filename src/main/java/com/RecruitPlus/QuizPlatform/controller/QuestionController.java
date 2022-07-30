@@ -1,13 +1,13 @@
 package com.RecruitPlus.QuizPlatform.controller;
 
-import com.RecruitPlus.QuizPlatform.model.Questions;
+import com.RecruitPlus.QuizPlatform.Dto.QuestionDto;
+import com.RecruitPlus.QuizPlatform.model.Question;
 import com.RecruitPlus.QuizPlatform.service.QuestionService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -16,36 +16,68 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/recruitPlus")
+@RequestMapping("/questions/v1")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @GetMapping("/questions")
-    @ResponseBody
-    public  List<Questions> getAllQuestions( ){
-        List<Questions> questionsList=questionService.getAllQuestions();
-        return questionsList;
+    //Listing out all the questions
+    @GetMapping("/")
+    public  Page<Question> getAllQuestions(Pageable p ){
+        return questionService.questionPaginated(p);
     }
 
-    @GetMapping("/questions/{questionId}")
-    @ResponseBody
-    public Optional<Questions> getQuestionById(@PathVariable  String questionId){
+    //Getting a question by specific id if exists
+    @GetMapping("/question/{question_id}")
+    public Optional<Question> getQuestionById(@PathVariable(value="question_id")  String questionId){
 
-        Optional<Questions> questionsListById=questionService.getQuestionById(questionId);
-        return questionsListById;
+        return questionService.getQuestionById(questionId);
+
     }
-    @PostMapping("/questions")
-    public ResponseEntity<Object> saveQuestion(@RequestBody Questions question)
+    //adding a new question
+    @PostMapping("/question")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public QuestionDto saveQuestion(@RequestBody Question question)
     {
-        questionService.saveNewQuestion(question);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
 
-    @DeleteMapping("/question/{questionId}")
-    public ResponseEntity<Object> deleteQuestion(@PathVariable String questionId){
-        questionService.deleteQuestion(questionId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        Question savedQuestion  = questionService.saveNewQuestion(question);
+        QuestionDto questionDto = new QuestionDto();
+        BeanUtils.copyProperties(savedQuestion,questionDto);
+
+        return questionDto;
 
     }
+
+    //updating existing question
+    @ResponseStatus(code = HttpStatus.OK)
+    @PutMapping("/question/{question_id}")
+    public void updateById(@RequestBody Question question,@PathVariable(value="question_id") String questionId )
+    {
+        questionService.updateQuestion(questionId,question);
+    }
+
+    //deleting a question with specific id
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @DeleteMapping("/question/{question_id}")
+    public void deleteQuestion(@PathVariable(value="question_id") String questionId){
+         questionService.deleteQuestion(questionId);
+    }
+
+    //deleting all questions
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @DeleteMapping("/")
+    public boolean deleteAllQuestion(){
+        questionService.deleteAllQuestion();
+        return true;
+    }
+
+    //Getting list of questions which are filtered by topic,type and difficulty level
+    @GetMapping("/")
+    public List<Question> filterQuestions(@RequestParam(required = false) String[] topics, @RequestParam(required = false) String type, @RequestParam(required = false) String difficulty_level)
+    {
+        return questionService.findQuestionByFilters(topics,type,difficulty_level);
+    }
+
+
+
 }
