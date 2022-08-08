@@ -11,12 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.lang.model.util.Elements;
 import java.util.List;
 import java.util.Optional;
 
 
 @RestController
 @RequestMapping("/questions/v1")
+@CrossOrigin(origins ="*")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
@@ -24,7 +26,14 @@ public class QuestionController {
     //Listing out all the questions
     @GetMapping("/")
     public  Page<Question> getAllQuestions(Pageable p ){
+
         return questionService.questionPaginated(p);
+    }
+
+    @GetMapping("/questions")
+    public  List<Question> getAllQuestions( ){
+
+        return questionService.allQuestion();
     }
 
     //Getting a question by specific id if exists

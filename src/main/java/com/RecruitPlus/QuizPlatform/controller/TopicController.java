@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/questions/v1")
+@CrossOrigin(origins ="*")
 public class TopicController {
     @Autowired
     private TopicService topicService;

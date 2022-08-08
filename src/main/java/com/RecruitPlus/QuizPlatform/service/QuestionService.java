@@ -27,6 +27,11 @@ public class QuestionService {
         return questionRepository.findAll( p);
     }
 
+
+    public List<Question> allQuestion(){
+        return questionRepository.findAll();
+    }
+
     //Getting a question by specific id if exists
     public Optional<Question> getQuestionById(String questionId){
 
@@ -40,6 +45,7 @@ public class QuestionService {
     // adding a new question
     public Question saveNewQuestion(Question question)
     {
+
         return questionRepository.save(question);
     }
     //updating existing question
