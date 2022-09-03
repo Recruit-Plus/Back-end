@@ -92,6 +92,10 @@ public class QuestionService {
         return mongoTemplate.find(query,Question.class);
 
     }
+    public List<Question> allQuestion(){
+
+        return questionRepository.findAll();
+    }
 
 
 

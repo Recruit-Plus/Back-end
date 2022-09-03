@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+@CrossOrigin(origins ="*")
 @RestController
 @RequestMapping("/questions/v1")
 public class QuestionController {
@@ -25,6 +26,12 @@ public class QuestionController {
     @GetMapping("/")
     public  Page<Question> getAllQuestions(Pageable p ){
         return questionService.questionPaginated(p);
+    }
+
+    @GetMapping("/questions")
+    public  List<Question> getAllQuestions( ){
+
+        return questionService.allQuestion();
     }
 
     //Getting a question by specific id if exists
