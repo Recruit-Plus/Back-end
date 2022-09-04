@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -85,6 +86,8 @@ public class QuestionController {
         return questionService.findQuestionByFilters(topics,type,difficulty_level);
     }
 
-
-
+    @GetMapping("/assessment/questions")
+    public List<Optional<Question>> getQuestionByMultipleIds(@RequestParam List question_ids){
+        return questionService.findByMultipleId(question_ids);
+    }
 }
