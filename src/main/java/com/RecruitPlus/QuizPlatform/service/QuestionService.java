@@ -79,7 +79,7 @@ public class QuestionService {
     public List<Question> findQuestionByFilters(String[] topics, String type, String difficulty_level){
         Query query = new Query();
         List<Criteria> criteria = new ArrayList<>();
-        if (topics != null)
+        if (topics != null && topics.length!=0)
             criteria.add(Criteria.where("topics").is(topics));
         if (type != null && !type.isEmpty())
             criteria.add(Criteria.where("Type").is(type));
@@ -100,8 +100,10 @@ public class QuestionService {
         List<Optional<Question>> questions=new ArrayList<Optional<Question>>();
         int n=question_ids.size();
         for(int i=0;i<n;i++){
-            questions.add(questionRepository.findById((question_ids.get(i)).toString()
-                    .replace("[","").replace("]","")));
+            Optional<Question> question1=questionRepository.findById((question_ids.get(i)).toString().replace("[","").replace("]",""));
+            if(question1!=null){
+                questions.add(question1);
+            }
         }
         return questions;
     }
