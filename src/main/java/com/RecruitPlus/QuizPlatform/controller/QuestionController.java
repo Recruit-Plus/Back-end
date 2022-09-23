@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
+@CrossOrigin(origins ="*")
 @RestController
 @RequestMapping("/questions/v1")
 public class QuestionController {
@@ -25,6 +27,12 @@ public class QuestionController {
     @GetMapping("/")
     public  Page<Question> getAllQuestions(Pageable p ){
         return questionService.questionPaginated(p);
+    }
+
+    @GetMapping("/questions")
+    public  List<Question> getAllQuestions( ){
+
+        return questionService.allQuestion();
     }
 
     //Getting a question by specific id if exists
@@ -78,6 +86,8 @@ public class QuestionController {
         return questionService.findQuestionByFilters(topics,type,difficulty_level);
     }
 
-
-
+    @GetMapping("/assessment/questions")
+    public List<Optional<Question>> getQuestionByMultipleIds(@RequestParam List question_ids){
+        return questionService.findByMultipleId(question_ids);
+    }
 }

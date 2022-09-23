@@ -3,6 +3,7 @@ package com.RecruitPlus.QuizPlatform.service;
 import com.RecruitPlus.QuizPlatform.Exceptions.QuestionNotFoundException;
 import com.RecruitPlus.QuizPlatform.model.Question;
 import com.RecruitPlus.QuizPlatform.repository.QuestionRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,9 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class QuestionService {
@@ -80,7 +79,7 @@ public class QuestionService {
     public List<Question> findQuestionByFilters(String[] topics, String type, String difficulty_level){
         Query query = new Query();
         List<Criteria> criteria = new ArrayList<>();
-        if (topics != null)
+        if (topics != null && topics.length!=0)
             criteria.add(Criteria.where("topics").is(topics));
         if (type != null && !type.isEmpty())
             criteria.add(Criteria.where("Type").is(type));
@@ -91,6 +90,22 @@ public class QuestionService {
             query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
         return mongoTemplate.find(query,Question.class);
 
+    }
+    public List<Question> allQuestion(){
+
+        return questionRepository.findAll();
+    }
+
+    public List<Optional<Question>> findByMultipleId(List question_ids){
+        List<Optional<Question>> questions=new ArrayList<Optional<Question>>();
+        int n=question_ids.size();
+        for(int i=0;i<n;i++){
+            Optional<Question> question1=questionRepository.findById((question_ids.get(i)).toString().replace("[","").replace("]",""));
+            if(question1!=null){
+                questions.add(question1);
+            }
+        }
+        return questions;
     }
 
 
